@@ -2,13 +2,71 @@
 <html>
 <head>
     <style>
-        * { margin: 0; padding: 0; overflow: hidden; }
-        video { width: 100vw; height: 100vh; object-fit: cover; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        #startBtn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 30px 60px;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,255,0,0.3);
+            transition: 0.3s;
+            z-index: 1000;
+        }
+        
+        #startBtn:hover {
+            transform: scale(1.1);
+            background: #45a049;
+        }
+        
+        #videoContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
-    <video autoplay muted loop playsinline>
-        <source src="video.mp4" type="video/mp4">
-    </video>
+    <button id="startBtn">НАЖМИ</button>
+    
+    <div id="videoContainer">
+        <video id="myVideo" loop playsinline>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <audio id="myAudio" loop>
+            <source src="sound.ogg" type="audio/ogg">
+        </audio>
+    </div>
+
+    <script>
+        document.getElementById('startBtn').addEventListener('click', function() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('videoContainer').style.display = 'block';
+            document.getElementById('myVideo').play();
+            document.getElementById('myAudio').play();
+        });
+    </script>
 </body>
-</html>
+    </html>
