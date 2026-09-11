@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Click Page</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            font-family: sans-serif;
+            overflow: hidden;
+            cursor: none !important; 
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            touch-action: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none !important;
+        }
+
+        #instruction {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 10;
+        }
+
+        #video-player {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            display: none;
+            z-index: 5;
+            pointer-events: none !important; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="instruction">Click on the screen.</div>
+
+    <video id="video-player" src="q.mp4" loop playsinline></video>
+
+    <script>
+        const body = document.documentElement;
+        const instruction = document.getElementById('instruction');
+        const video = document.getElementById('video-player');
+        let activated = false;
+
+        function goFullscreen() {
+            if (body.requestFullscreen) {
+                body.requestFullscreen().catch(err => console.log(err));
+            } else if (body.webkitRequestFullscreen) {
+                body.webkitRequestFullscreen();
+            }
+        }
+
+        window.addEventListener('click', (e) => {
+            if (activated) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+            
+            activated = true;
+            instruction.style.display = 'none';
+            video.style.display = 'block';
+            
+            video.play().catch(err => {
+                console.log(err);
+            });
+
+            goFullscreen();
+        }, true);
+
+        document.addEventListener('fullscreenchange', () => {
+            if (activated && !document.fullscreenElement && !document.webkitFullscreenElement) {
+                goFullscreen();
+            }
+        });
+
+        window.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, true);
+
+        window.addEventListener('keydown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, true);
+
+        window.addEventListener('keyup', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, true);
+
+        window.addEventListener('dragstart', (e) => e.preventDefault(), true);
+        window.addEventListener('drop', (e) => e.preventDefault(), true);
+
+        window.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+        window.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+
+        setInterval(() => {
+            window.focus();
+        }, 1000);
+
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            e.returnValue = ''; 
+            return ''; 
+        });
+    </script>
+</body>
+</html>
